@@ -241,3 +241,50 @@ for(i in seq_along(tigers)){
   big_cats[i] <- tigers[i] + lions[i]
 }
 #but in one line!
+
+
+# For loops to iterate across columns of data frame
+
+#create vector to store values
+mean_mtcars <- vector(mode="numeric", length=ncol(mtcars))
+
+for(i in 1:ncol(mtcars)){
+mean_val <- mean(mtcars[[i]], na.rm = TRUE)
+mean_mtcars[i] <- mean_val
+} #created summaries (means) for each of these columns
+
+# a for loop over columns with a condition, because for df not all columns are numeric!
+
+library(palmerpenguins)
+
+penguins_mediancol3 <- median(penguins[[3]], na.rm=TRUE)
+rm(penguins)
+
+i <- 3
+if (is.numeric(penguins[[i]])){
+  penguins_median <- median(penguins[[i]], na.rm=TRUE)
+}
+
+for(i in 1:ncol(penguins)) {
+  if (is.numeric(penguins[[i]])){
+    penguins_median <- median(penguins[[i]], na.rm=TRUE)
+    print(penguins_median)
+  } else print("data not numeric")
+}
+
+# Functional programming
+
+# apply function iterates over columns or rows
+
+#rewrite our for loop for finding mean values of the columns in mtcars
+mean_mtcars2 <- apply(X = mtcars, MARGIN = 2, FUN = mean)
+#same as saying apply the function mean across the columns in mtcars
+
+#trying functional programming with what we had done to the palmer penguins data frame
+library(tidyverse)
+
+
+penguin_summary <- penguins |> 
+  group_by(species) |>
+  summarise(across(where(is.numeric), mean, na.rm=TRUE)) #get a warning message but get the mean of all columns by species!
+#stored summary as variable!
